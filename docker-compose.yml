@@ -8,12 +8,8 @@ services:
       - ./initdb.sh:/docker-entrypoint-initdb.d/initdb.sh:rx
     ports:
       - 5432:5432
-    secrets:
-      - db_password
-    environment:
-      - POSTGRES_USER=matb09-ufba
-      - POSTGRES_PASSWORD_FILE=/run/secrets/db_password
-      - POSTGRES_DATABASE=matb09-ufba
+    env_file:
+      - ./.env
     networks:
       - default
   pgadmin: 
@@ -24,16 +20,8 @@ services:
       - default
     depends_on:
       - database
-    secrets:
-      - pgadmin_password
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=matb09@ufba.br
-      - PGADMIN_DEFAULT_PASSWORD_FILE=/run/secrets/pgadmin_password
-secrets:
-  pgadmin_password:
-    file: secrets/pgadmin_password
-  db_password:
-    file: secrets/db_password
+    env_file:
+      - ./.env
 networks:
   default:
       name: db-connection 
